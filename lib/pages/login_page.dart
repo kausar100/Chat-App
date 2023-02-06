@@ -32,8 +32,15 @@ class _LoginPage extends State<LoginPage> {
     }
   }
 
+  double _currentSliderValue = 20;
+  double available = 200;
+  double minValue = 20, maxValue = (200.0 / 20.0) * 20.0;
+  int divisionValue = ((200.0 / 20.0) - 1.0).toInt();
+
   @override
   Widget build(BuildContext context) {
+    print('min value : $minValue, max value ; $maxValue');
+    print('division : $divisionValue, selected value : $_currentSliderValue');
     return Scaffold(
         body: Center(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -65,7 +72,67 @@ class _LoginPage extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(_message),
-        )
+        ),
+        Center(child: Text('Selected Amount : $_currentSliderValue')),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  if (_currentSliderValue > minValue) {
+                    setState(() {
+                      _currentSliderValue = _currentSliderValue - minValue;
+                    });
+                  }
+                },
+                child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
+                    ),
+                    child: const Icon(
+                      Icons.remove,
+                      color: Colors.white,
+                    )),
+              ),
+              Expanded(
+                child: Slider(
+                  onChanged: (double value) {
+                    setState(() {
+                      _currentSliderValue = value;
+                    });
+                  },
+                  value: _currentSliderValue,
+                  activeColor: Colors.blue,
+                  label: _currentSliderValue.round().toString(),
+                  divisions: divisionValue,
+                  inactiveColor: Colors.black,
+                  min: minValue,
+                  max: maxValue,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  if (_currentSliderValue < maxValue) {
+                    setState(() {
+                      _currentSliderValue = _currentSliderValue + minValue;
+                    });
+                  }
+                },
+                child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.green,
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    )),
+              ),
+            ],
+          ),
+        ),
       ]),
     ));
   }
